@@ -8,36 +8,56 @@
         $Y = $_POST['coordinateY'];
         $R = $_POST['radius'];
 
-        if (pointIsInTriangle($X, $Y, $R) || pointIsInRectangle($X, $Y, $R) || pointIsInCircle($X, $Y, $R))
+        $allowedValuesOfX = ['-3', '-2', '-1', '0', '1', '2', '3', '4', '5'];
+        $allowedValuesOfR = ['1', '1.5', '2', '2.5', '3'];
+
+        if (in_array($X, $allowedValuesOfX) && preg_match("/^((-?[0-2]\.\d*(?=[1-9])[1-9])|0|(-?[12]))$/", $Y) && in_array($R, $allowedValuesOfR))
         {
-            $msg = "Да";
+            if (pointIsInTriangle($X, $Y, $R) || pointIsInRectangle($X, $Y, $R) || pointIsInCircle($X, $Y, $R))
+            {
+                $msg = "Да";
+            }
+            else
+            {
+                $msg = "Нет";
+            }
+
+            date_default_timezone_set('Europe/Moscow');
+            $endTime = microtime(true);
+            $executionTime = round($endTime - $startTime, 6);
+            $currentTime = date('d.m.y H:i:s');
+
+            $row = "<tr><td>$X</td><td>$Y</td><td>$R</td><td>$msg</td><td>$currentTime</td><td>$executionTime</td></tr>";
+            if (isset($_SESSION['rows']))
+            {
+                $_SESSION['rows'][] = $row;
+            }
+            else
+            {
+                $_SESSION['rows'] = array($row);
+            }
         }
         else
         {
-            $msg = "Нет";
+            echo "Ошибка в формате введённых данных! Используйте <a href='index.html'>форму</a>.</br>";
         }
 
-        $endTime = microtime(true);
-        $executionTime = round($endTime - $startTime, 6);
-        date_default_timezone_set('Europe/Moscow');
-        $currentTime = date('H:i:s');
-        $row = "<tr><td>$X</td><td>$Y</td><td>$R</td><td>$msg</td><td>$currentTime</td><td>$executionTime</td></tr>";
         if (isset($_SESSION['rows']))
         {
-            $_SESSION['rows'][] = $row;
-        } else {
-            $_SESSION['rows'] = array($row);
+            echo "<table border='1'>";
+            echo "<thead><tr><td>Координата X</td><td>Координата Y</td><td>Радиус R</td><td>Попадание в область</td><td>Время выполнения</td><td>Длительность выполения</td></tr></thead>";
+            echo "<tbody>";
+            foreach ($_SESSION['rows'] as $row)
+            {
+                echo $row;
+            }
+            echo "</tbody>";
+            echo "</table>";
         }
-
-        echo "<table border='1'>";
-        echo "<thead><tr><td>Координата X</td><td>Координата Y</td><td>Радиус R</td><td>Попадание в область</td><td>Время выполнения</td><td>Длительность выполения</td></tr></thead>";
-        echo "<tbody>";
-        foreach ($_SESSION['rows'] as $row)
+        else
         {
-            echo $row;
+            echo "История запросов пуста.<br>";
         }
-        echo "</tbody>";
-        echo "</table>";
     }
     else
     {

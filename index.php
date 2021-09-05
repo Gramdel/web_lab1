@@ -1,47 +1,71 @@
-<?php
-    $startTime = microtime(true);
-    session_start();
-
-    if (isset($_POST['coordinateX']) && isset($_POST['coordinateY']) && isset($_POST['radius']))
-    {
-        $X = $_POST['coordinateX'];
-        $Y = $_POST['coordinateY'];
-        $R = $_POST['radius'];
-
-        $allowedValuesOfX = ['-3', '-2', '-1', '0', '1', '2', '3', '4', '5'];
-        $allowedValuesOfR = ['1', '1.5', '2', '2.5', '3'];
-
-        if (in_array($X, $allowedValuesOfX) && preg_match("/^((-?[0-2]\.\d*(?=[1-9])[1-9])|0|(-?[12]))$/", $Y) && in_array($R, $allowedValuesOfR))
-        {
-            if (pointIsInTriangle($X, $Y, $R) || pointIsInRectangle($X, $Y, $R) || pointIsInCircle($X, $Y, $R))
-            {
-                $msg = "Да";
-            }
-            else
-            {
-                $msg = "Нет";
-            }
-
-            date_default_timezone_set('Europe/Moscow');
-            $endTime = microtime(true);
-            $executionTime = round($endTime - $startTime, 6);
-            $currentTime = date('d.m.y H:i:s');
-
-            $row = "<tr><td>$X</td><td>$Y</td><td>$R</td><td>$msg</td><td>$currentTime</td><td>$executionTime</td></tr>";
-            if (isset($_SESSION['rows']))
-            {
-                $_SESSION['rows'][] = $row;
-            }
-            else
-            {
-                $_SESSION['rows'] = array($row);
-            }
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <title>lab1</title>
+    <style>
+        .mainHeading::first-line {
+            color: #4a98ff;
+            font-size: 25pt;
         }
-        else
-        {
-            echo "Ошибка в формате введённых данных! Используйте <a href='index.html'>форму</a>.</br>";
+        .mainHeading {
+            margin-top: 1.5%;
+            margin-left: 1.5%;
+            color: #114da4;
+            font-family: fantasy;
+            font-size: 23pt;
         }
+        #content {
+            margin-top: 1.5%;
+            margin-left: 1.5%;
+            font-family: "Calibri", sans-serif;
+            font-size: large;
+        }
+        #content div {
+            margin-bottom: 1.5%;
+        }
+        .inputBlock {
+            font-size: larger;
+            font-style: italic;
+        }
+        button {
+            font-family: "Calibri Light", sans-serif;
+            width: 20.9%;
+            padding-bottom: 3px;
+            font-size: 15pt;
+        }
+        input {
+            margin-left: 1%;
+        }
+        input:invalid {
+            color: red;
+        }
+    </style>
+</head>
+<body>
 
+<header>
+    <div class="mainHeading">
+        Асташин Сергей Сергеевич<br>
+        Группа: P3230 Вариант: 30003
+    </div>
+</header>
+
+<div id="content">
+    <form action="core.php" method="post" name="pointCheckForm">
+        <div class="inputBlock">
+            <b>Изменение X:</b><label><input type="checkbox" name="coordinateX" checked onclick="changeCheckBoxBehavior(this)" value="-3"/>-3</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="-2"/>-2</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="-1"/>-1</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="0"/>0</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="1"/>1</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="2"/>2</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="3"/>3</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="4"/>4</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="5"/>5</label>
+        </div>
+        <div class="inputBlock">
+            <b>Изменение Y:</b><label data-validate="Обязательное поле"><input type="text" name="coordinateY" style="margin-left: 1.2%; width: 12.5%; font-size: 16pt; font-style: italic; font-family: 'Calibri', sans-serif;" pattern="(-?[0-2]\.\d*(?=[1-9])[1-9])|0|(-?[12])" required title="Число из промежутка (-3...3); разделитель целой и дробной части - точка (.); незначащие нули не писать!" autocomplete="off"/></label>
+        </div>
+        <div class="inputBlock">
+            <b>Изменение R:</b><label><input type="checkbox" name="radius" checked onclick="changeCheckBoxBehavior(this)" value="1"/>1</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="1.5"/>1.5</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="2"/>2</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="2.5"/>2.5</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="3"/>3</label>
+        </div>
+        <button type="submit">Отправить</button>
+    </form>
+    <?php
+        session_start();
         if (isset($_SESSION['rows']))
         {
             echo "<table border='1'>";
@@ -58,23 +82,18 @@
         {
             echo "История запросов пуста.<br>";
         }
-    }
-    else
+    ?>
+</div>
+</body>
+</html>
+<script>
+    function changeCheckBoxBehavior(element)
     {
-        echo "Заполните <a href='index.html'>форму</a>!";
+        let checkboxes = document.getElementsByName(element.name);
+        for (let i = 0; i < checkboxes.length; i++)
+        {
+            checkboxes[i].checked = false;
+        }
+        element.checked = true;
     }
-
-    function pointIsInTriangle($X, $Y, $R)
-    {
-        return ($Y <= $X + $R) && ($Y >= 0) && ($X <= 0);
-    }
-
-    function pointIsInRectangle($X, $Y, $R)
-    {
-        return ($Y >= -$R) && ($Y <= 0) && ($X >= -$R / 2) && ($X <= 0);
-    }
-
-    function pointIsInCircle($X, $Y, $R)
-    {
-        return ($X * $X + $Y * $Y <= $R * $R / 4) && ($Y >= 0) && ($X >= 0);
-    }
+</script>

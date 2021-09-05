@@ -36,13 +36,12 @@
             {
                 $_SESSION['rows'] = array($row);
             }
+            header("location: /lab1/index.php");
         }
         else
         {
             echo "Ошибка в формате введённых данных! Используйте <a href='index.php'>форму</a>.</br>";
         }
-
-        header("location: /lab1/index.php");
     }
     else
     {

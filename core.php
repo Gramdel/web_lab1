@@ -36,7 +36,7 @@
             {
                 $_SESSION['rows'] = array($row);
             }
-            header("location: /lab1/index.php");
+            header("location: index.php");
         }
         else
         {

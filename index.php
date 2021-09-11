@@ -127,7 +127,7 @@
         if (isset($_SESSION['rows']))
         {
             echo "<table class='history'>";
-            echo "<thead><tr><th>Значение X</th><th>Значение Y</th><th>Значение R</th><th>Попадание</th><th>Время и дата</th><th>Длительность</th></tr></thead>";
+            echo "<thead><tr><th>Значение X</th><th>Значение Y</th><th>Значение R</th><th>Попадание</th><th>Дата и время</th><th>Длительность</th></tr></thead>";
             echo "<tbody>";
             foreach ($_SESSION['rows'] as $row)
             {

@@ -5,11 +5,7 @@
     <meta charset="utf-8"/>
     <title>lab1</title>
     <style>
-        .mainHeading span {
-            color: #4a98ff;
-            font-size: 23pt;
-        }
-        .mainHeading {
+        #mainHeading {
             width: 756px;
             text-align: center;
             margin-left: auto;
@@ -17,6 +13,18 @@
             color: #114da4;
             font-family: fantasy;
             font-size: 23pt;
+        }
+        #mainHeading::selection {
+            color: white;
+            background-color: #114da4;
+        }
+        #mainHeading span {
+            color: #4a98ff;
+            font-size: 23pt;
+        }
+        #mainHeading span::selection {
+            color: white;
+            background-color: #4a98ff;
         }
         #content {
             width: 756px;
@@ -33,13 +41,14 @@
             font-size: larger;
             font-style: italic;
         }
-        button {
+        .submitButton {
             font-family: "Calibri Light", sans-serif;
             width: 548px;
             height: 45px;
             padding-bottom: 3px;
             font-size: 16pt;
             margin-top: 0.5%;
+            cursor: pointer;
         }
         input {
             margin-left: 3.22%;
@@ -57,11 +66,9 @@
         }
         .history {
             width: 756px;
-            margin-top: 0;
-            margin-left: auto;
-            margin-right: auto;
             border-collapse: collapse;
             font-size: 15pt;
+            margin: 0 auto 10px;
         }
         .history td {
             border: 1px solid rgb(118, 118, 118);
@@ -95,12 +102,40 @@
             padding-top: 20px;
             padding-bottom: 0;
         }
+        #scrollUpButton {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            font-family: "Calibri Light", sans-serif;
+            font-weight: bold;
+            font-size: 15pt;
+            color: white;
+            border: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #4a98ff;
+            line-height: 34px;
+            position: fixed;
+            bottom: 10px;
+            left: 525px;
+        }
+        #scrollUpButton:hover {
+            box-shadow: 0 1px 10px 2px rgba(17, 77, 164, 0.6);
+        }
+        #scrollUpButton:active {
+            background-color: #114da4;
+            cursor: none;
+        }
+        #scrollUpButton[hidden] {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="mainHeading">
+    <div id="mainHeading">
         <span>Асташин Сергей Сергеевич</span> Группа: P3230 Вариант: 30003
     </div>
 </header>
@@ -117,11 +152,11 @@
             <div class="inputBlock">
                 <b>Изменение R:</b><label><input type="checkbox" name="radius" checked onclick="changeCheckBoxBehavior(this)" value="1"/>1</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="1.5"/>1.5</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="2"/>2</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="2.5"/>2.5</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="3"/>3</label>
             </div>
-            <button type="submit">Отправить</button>
+            <button class="submitButton" type="submit">Отправить</button>
         </form>
     </div>
     <div id="flushRight">
-        <img src="images/area.png"/>
+        <img src="images/area.png" title="График" alt="График"/>
     </div>
     <?php
         if (isset($_SESSION['rows']))
@@ -142,6 +177,7 @@
         }
     ?>
 </div>
+<a href="#mainHeading" id="scrollUpButton" title="Наверх" hidden>↑</a>
 </body>
 </html>
 <script>
@@ -154,4 +190,8 @@
         }
         element.checked = true;
     }
+
+    window.addEventListener('scroll', function() {
+        document.getElementById('scrollUpButton').hidden = scrollY < 300;
+    });
 </script>

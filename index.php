@@ -68,7 +68,7 @@
             width: 756px;
             border-collapse: collapse;
             font-size: 15pt;
-            margin: 0 auto 10px;
+            margin: 0 auto 12px;
         }
         .history td {
             border: 1px solid rgb(118, 118, 118);
@@ -115,10 +115,11 @@
             height: 40px;
             border-radius: 20px;
             background-color: #4a98ff;
-            line-height: 34px;
-            position: fixed;
+            line-height: 36px;
+            position: sticky;
             bottom: 10px;
-            left: 525px;
+            margin-left: -49px;
+            margin-top: -50px;
         }
         #scrollUpButton:hover {
             box-shadow: 0 1px 10px 2px rgba(17, 77, 164, 0.6);
@@ -147,7 +148,7 @@
                 <b>Изменение X:</b><label><input type="checkbox" name="coordinateX" checked onclick="changeCheckBoxBehavior(this)" value="-3"/>-3</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="-2"/>-2</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="-1"/>-1</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="0"/>0</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="1"/>1</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="2"/>2</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="3"/>3</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="4"/>4</label><label><input type="checkbox" name="coordinateX" onclick="changeCheckBoxBehavior(this)" value="5"/>5</label>
             </div>
             <div class="inputBlock">
-                <b>Изменение Y:</b><label data-validate="Обязательное поле"><input type="text" name="coordinateY" class="textField" pattern="(-?[0-2]\.\d*(?=[1-9])[1-9])|0|(-?[12])" required title="Число из промежутка (-3...3); разделитель целой и дробной части - точка (.); незначащие нули не писать!" autocomplete="off"/></label>
+                <b>Изменение Y:</b><label data-validate="Обязательное поле"><input type="text" name="coordinateY" class="textField" pattern="(-?[0-2]\.\d*(?=[1-9])[1-9])|0|(-?[12])" required title="Число из промежутка (-3...3); разделитель целой и дробной части - точка (.); незначащие нули не писать!" autocomplete="off" autofocus/></label>
             </div>
             <div class="inputBlock">
                 <b>Изменение R:</b><label><input type="checkbox" name="radius" checked onclick="changeCheckBoxBehavior(this)" value="1"/>1</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="1.5"/>1.5</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="2"/>2</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="2.5"/>2.5</label><label><input type="checkbox" name="radius" onclick="changeCheckBoxBehavior(this)" value="3"/>3</label>
@@ -176,8 +177,8 @@
             echo "<div class='error'>История запросов пуста, поэтому таблица не загружена.</div>";
         }
     ?>
+    <a href="#mainHeading" id="scrollUpButton" title="Наверх" hidden>↑</a>
 </div>
-<a href="#mainHeading" id="scrollUpButton" title="Наверх" hidden>↑</a>
 </body>
 </html>
 <script>
@@ -192,6 +193,6 @@
     }
 
     window.addEventListener('scroll', function() {
-        document.getElementById('scrollUpButton').hidden = scrollY < 300;
+        document.getElementById('scrollUpButton').hidden = scrollY < 30;
     });
 </script>
